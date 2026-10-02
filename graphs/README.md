@@ -8,7 +8,7 @@
 | ecg_abnormal_A.png | Member 1 | Abnormal ECG, atrial beat (record 100) |
 
 Add your graph file here with a one-line description.
-1. Member 3: 1D-CNN - training accuracy/loss graph, confusion matrix
-2. Member 4: CNN-LSTM - graph, CPU vs GPU timing chart
-3. Member 5: final comparison chart
+Member 3: 1D-CNN - training accuracy/loss graph, confusion matrix
+Member 4: CNN-LSTM - graph, CPU vs GPU timing chart
+Member 5: final comparison chart
 You need to upload these graphs
