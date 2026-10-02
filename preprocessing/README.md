@@ -32,7 +32,7 @@ To prevent data leakage, segmentation is strictly split by patient/record (not r
 
 ## 4. Preprocessed File (.npz) & Google Drive Link
 The generated dataset file is **`ecg_processed_v1.npz`** (~134 MB). Due to GitHub's file size limit, it is hosted on Google Drive:
-- **Drive Link:** [ecg_processed_v1.npz on Google Drive](https://drive.google.com/file/d/1TO043QL8KSBiMkkf4Di5MMbLF5wXGgTO/view0)
+- **Drive Link:** [ecg_processed_v1.npz on Google Drive](https://drive.google.com/file/d/1TO043QL8KSBiMkkf4Di5MMbLF5wXGgT0/view)
 
 ### Array Shapes & Data Types:
 - `X_train`: `(68386, 360, 1)` — float32
