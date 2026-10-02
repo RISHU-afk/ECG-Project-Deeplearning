@@ -15,7 +15,7 @@ GPU-Accelerated Deep Learning-Based ECG Signal Classification for Cardiac Abnorm
 | Member 2 | Data Preprocessing | Ritam Jana |
 | Member 3 | 1D-CNN Model | Rishi Raj |
 | Member 4 | CNN-LSTM + GPU Performance | Rohan Adak |
-| Member 5 | Integration + Evaluation + Demo | Rishabh Jah |
+| Member 5 | Integration + Evaluation + Demo | Rishabh Jha |
 
 ## Progress
 
