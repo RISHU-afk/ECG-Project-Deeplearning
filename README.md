@@ -24,7 +24,7 @@ GPU-Accelerated Deep Learning-Based ECG Signal Classification for Cardiac Abnorm
 | Dataset + ECG analysis | Member 1 | Done |
 | Preprocessing + split | Member 2 | Done |
 | 1D-CNN | Member 3 | Pending |
-| CNN-LSTM + CPU/GPU | Member 4 | Pending |
+| CNN-LSTM + CPU/GPU | Member 4 | Done |
 | Integration + demo | Member 5 | Pending |
 
 Update your row when your part is finished.
@@ -102,6 +102,60 @@ Load in Colab:
 
 Train has far fewer abnormal beats (8.2%) than test (19.9%), so use class weights and judge models with recall, F1 and the confusion matrix, not accuracy alone.
 
+## CNN-LSTM and CPU/GPU results (Member 4)
+
+**Model:** ECG (360 x 1) -> 3 x (Conv1D + MaxPool) -> LSTM(64) -> Dense(32) -> Dropout(0.3) -> Sigmoid (Normal / Abnormal)
+
+**Files:** notebooks/cnn_lstm_gpu_v1_Rohan_WORK.ipynb, models/cnn_lstm_v1.keras, results/cnn_lstm_*.csv, graphs/cnn_lstm_*.png
+
+**Experiment settings** (Member 3 should use the same settings so the comparison is fair):
+
+| Setting | Value |
+|---|---|
+| Data | ecg_processed_v1.npz (same file as Member 3) |
+| Seed | 42 |
+| Batch size | 128 |
+| Optimizer / learning rate | Adam, 0.001 |
+| Loss | binary cross-entropy |
+| Class weights | Normal 0.5446, Abnormal 6.1103 (balanced, from train set) |
+| Epochs | max 15, early stopping on val_loss (patience 4, best weights restored) |
+| Threshold | 0.5 (probability >= 0.5 means abnormal) |
+| Precision | float32 (no mixed precision) |
+
+**Test set results (Experiment A, trained on GPU):**
+
+| Metric | CNN-LSTM |
+|---|---|
+| Accuracy | 0.7605 |
+| Precision (abnormal) | 0.4138 |
+| Recall (abnormal) | 0.4880 |
+| F1-score (abnormal) | 0.4479 |
+| Specificity | 0.8282 |
+| ROC-AUC | 0.7418 |
+| Confusion matrix (TN / FP / FN / TP) | 10546 / 2187 / 1620 / 1544 |
+| Epochs run / best epoch | 13 / 9 |
+| Training time (GPU, 13 epochs) | 112.11 s (about 8.59 s per epoch) |
+
+**CPU vs GPU (Experiment B, same model, data, seed, batch size, 5 epochs, no early stopping):**
+
+| Metric | CPU | GPU | Speedup (CPU / GPU) |
+|---|---|---|---|
+| Total training time (5 epochs) | 297.20 s | 33.94 s | 8.76x |
+| Average epoch time (epoch 2 onward) | 60.64 s | 6.22 s | 9.75x |
+| First epoch (includes warm-up) | 54.47 s | 8.80 s | - |
+| Inference, full test set (15,897 beats) | 3.563 s | 0.479 s | 7.43x |
+| Inference per beat | 0.2241 ms | 0.0302 ms | 7.42x |
+| Test accuracy after 5 epochs | 0.7632 | 0.7671 | - |
+
+**Runtime used (recorded 2026-10-04):** Google Colab, Tesla T4 GPU (15360 MiB), NVIDIA driver 580.82.07, CUDA 12.5.1, cuDNN 9, Intel Xeon CPU @ 2.00GHz (2 logical cores), about 12.7 GiB RAM, Python 3.13.15, TensorFlow 2.20.0, Keras 3.13.2. Full details: results/hardware_info_v1.json
+
+**Notes and limitations:**
+
+- Validation recall is high (0.85) but test recall is much lower (0.49). Validation loss is unstable and train accuracy is about 98%, so the model fits the training records much better than new records. Records are split record-wise, so test records are unseen patients.
+- Each timing experiment was run once (TIMING_REPEATS = 1). Colab hardware can be different in another session, so timings should be compared only with runs on the same hardware.
+- The CPU run uses tf.device('/CPU:0') inside the same Colab GPU runtime, with the same settings as the GPU run. Epoch time includes validation time.
+- The CPU and GPU accuracy values differ slightly (0.7632 vs 0.7671) because they are separate 5-epoch runs with different compute kernels. They are not the same as the main model in the test results table.
+
 ## Folder guide
 
 | Folder | What goes here | Main member |
@@ -120,12 +174,19 @@ Train has far fewer abnormal beats (8.2%) than test (19.9%), so use class weight
 
 - results/dataset_stats_per_record.csv - beat counts per record
 - graphs/class_distribution.png, ecg_normal.png, ecg_abnormal_V.png, ecg_abnormal_A.png
-- notebooks/ - dataset analysis notebook
+- notebooks/Dataset_+_ECG_ANALYSIS_Ronit_WORK.ipynb - dataset analysis notebook
 
 ## Member 2 files
 
-- notebooks/02_preprocessing_v1.ipynb - preprocessing and split
+- notebooks/02_preprocessing_v1_Ritam_WORK.ipynb - preprocessing and split
 - preprocessing/ - code and README
+
+## Member 4 files
+
+- notebooks/cnn_lstm_gpu_v1_Rohan_WORK.ipynb - CNN-LSTM training, CPU/GPU experiments
+- models/cnn_lstm_v1.keras - trained CNN-LSTM model
+- results/cnn_lstm_metrics_v1.csv, cnn_lstm_cpu_gpu_timing_v1.csv, cnn_lstm_timing_raw_v1.csv, cnn_lstm_history_v1.csv, cnn_lstm_experiment_settings_v1.json, hardware_info_v1.json
+- graphs/cnn_lstm_training_curves_v1.png, cnn_lstm_confusion_matrix_v1.png, cnn_lstm_cpu_vs_gpu_v1.png
 
 ## Rules
 
