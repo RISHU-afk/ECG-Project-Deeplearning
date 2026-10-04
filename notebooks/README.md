@@ -4,7 +4,7 @@
 |---|---|---|
 | Dataset_+_ECG_ANALYSIS_Ronit_WORK.ipynb | Member 1 | MIT-BIH download, label counts, ECG plots, README |
 | 02_preprocessing_v1_Ritam_WORK.ipynb | Member 2 | Preprocessing |
-| (Member 3 er file) | Member 3 | 1D-CNN |
+| (Member 3 file - pending) | Member 3 | 1D-CNN |
 | cnn_lstm_gpu_v1_Rohan_WORK.ipynb | Member 4 | CNN-LSTM training, CPU vs GPU timing, hardware info (run on Colab T4 GPU runtime) |
 
 Run notebooks in Google Colab. File naming: name_v1.ipynb, name_v2.ipynb.
