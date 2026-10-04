@@ -1,0 +1,17 @@
+{
+  "SEED": 42,
+  "BATCH_SIZE": 128,
+  "LEARNING_RATE": 0.001,
+  "optimizer": "Adam",
+  "loss": "binary_crossentropy",
+  "MAIN_EPOCHS": 15,
+  "TIMING_EPOCHS": 5,
+  "TIMING_REPEATS": 1,
+  "THRESHOLD": 0.5,
+  "class_weight": {
+    "0": 0.5445612358655837,
+    "1": 6.110257326661902
+  },
+  "precision": "float32 (no mixed precision)",
+  "data": "ecg_processed_v1.npz"
+}

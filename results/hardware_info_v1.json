@@ -1,0 +1,15 @@
+{
+  "recorded_at": "2026-10-04 15:08:15",
+  "python": "3.13.15",
+  "tensorflow": "2.20.0",
+  "keras": "3.13.2",
+  "gpu_detected": true,
+  "gpu_name": "Tesla T4",
+  "gpu_memory": "15360 MiB",
+  "nvidia_driver": "580.82.07",
+  "cuda_build": "12.5.1",
+  "cudnn_build": "9",
+  "cpu_model": "Intel(R) Xeon(R) CPU @ 2.00GHz",
+  "cpu_logical_cores": 2,
+  "ram": "MemTotal:       13286944 kB"
+}

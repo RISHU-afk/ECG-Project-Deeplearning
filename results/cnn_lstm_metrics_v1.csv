@@ -1,0 +1,2 @@
+model,device,epochs_run,train_time_s,avg_epoch_time_s,test_accuracy,test_precision,test_recall,test_f1,test_specificity,test_roc_auc,test_TN,test_FP,test_FN,test_TP,val_accuracy,val_precision,val_recall,val_f1,val_specificity,val_roc_auc
+CNN-LSTM,/GPU:0,13,112.11,8.59,0.7605,0.4138,0.488,0.4479,0.8282,0.7418,10546,2187,1620,1544,0.8226,0.3733,0.8483,0.5185,0.8193,0.9171

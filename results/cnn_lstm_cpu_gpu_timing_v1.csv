@@ -1,0 +1,3 @@
+device,epochs,train_time_total_s,epoch1_s,steady_epoch_avg_s,inference_test_set_s,inference_ms_per_beat,test_accuracy,test_precision,test_recall,test_f1,batch_size,n_train_samples,n_test_samples
+CPU,5.0,297.2005,54.4685,60.6356,3.5626,0.2241,0.7632,0.4219,0.5133,0.4631,128,68386,15897
+GPU,5.0,33.9403,8.7968,6.2177,0.4793,0.0302,0.7671,0.4294,0.518,0.4696,128,68386,15897
