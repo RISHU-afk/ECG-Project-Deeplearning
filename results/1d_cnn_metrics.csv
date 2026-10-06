@@ -1,0 +1,2 @@
+model,test_accuracy,test_loss,precision_abnormal,recall_abnormal,f1_abnormal,macro_f1,roc_auc,TN,FP,FN,TP,best_epoch,epochs_run,batch_size,training_time_sec,n_params
+1D-CNN,0.8065672768446877,0.5674283504486084,0.5139192993431342,0.5192793931731985,0.5165854425404811,0.6978397664477658,0.8448280064651782,11179,1554,1521,1643,1,7,128,462.6,379265
