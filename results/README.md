@@ -3,6 +3,8 @@
 | File | Member | Description |
 |---|---|---|
 | dataset_stats_per_record.csv | Member 1 | Beat counts per record (normal/abnormal) |
+| 1d_cnn_metrics.csv | Member 3 | 1D-CNN test metrics (accuracy, precision, recall, F1, macro F1, ROC-AUC), confusion matrix counts, best epoch, epochs run, training time, parameters |
+| 1d_cnn_classification_report.csv | Member 3 | 1D-CNN per-class precision, recall, F1 and support on the test set |
 | cnn_lstm_metrics_v1.csv | Member 4 | CNN-LSTM main run (GPU): test and validation metrics, confusion matrix counts, training time, epochs run |
 | cnn_lstm_cpu_gpu_timing_v1.csv | Member 4 | CPU vs GPU summary: training time, epoch time, inference time, accuracy (5 epochs each) |
 | cnn_lstm_timing_raw_v1.csv | Member 4 | Raw CPU/GPU timing for each repeat |
