@@ -23,7 +23,7 @@ GPU-Accelerated Deep Learning-Based ECG Signal Classification for Cardiac Abnorm
 |---|---|---|
 | Dataset + ECG analysis | Member 1 | Done |
 | Preprocessing + split | Member 2 | Done |
-| 1D-CNN | Member 3 | Pending |
+| 1D-CNN | Member 3 | Done |
 | CNN-LSTM + CPU/GPU | Member 4 | Done |
 | Integration + demo | Member 5 | Pending |
 
@@ -156,6 +156,62 @@ Train has far fewer abnormal beats (8.2%) than test (19.9%), so use class weight
 - The CPU run uses tf.device('/CPU:0') inside the same Colab GPU runtime, with the same settings as the GPU run. Epoch time includes validation time.
 - The CPU and GPU accuracy values differ slightly (0.7632 vs 0.7671) because they are separate 5-epoch runs with different compute kernels. They are not the same as the main model in the test results table.
 
+## 1D-CNN results (Member 3)
+
+**Model:** ECG (360 x 1) -> Conv1D(32, k=5) + MaxPool -> Conv1D(64, k=5) + MaxPool -> Flatten -> Dense(64) -> Dropout(0.5) -> Sigmoid (Normal / Abnormal). Total 379,265 parameters.
+
+**Files:** notebooks/03_1d_cnn_Rishi_WORK.ipynb, models/1d_cnn_model.keras, results/1d_cnn_metrics.csv, results/1d_cnn_classification_report.csv, graphs/1d_cnn_accuracy.png, 1d_cnn_loss.png, 1d_cnn_confusion_matrix.png
+
+**Settings:**
+
+| Setting | Value |
+|---|---|
+| Data | ecg_processed_v1.npz (same file as Member 4, shapes checked in the notebook) |
+| Seed | 42 |
+| Batch size | 128 |
+| Optimizer / learning rate | Adam, 0.001 (ReduceLROnPlateau: factor 0.5, patience 2, min 1e-5) |
+| Loss | binary cross-entropy |
+| Class weights | Normal 0.5446, Abnormal 6.1103 (balanced, from train set) |
+| Epochs | max 30, early stopping on val_loss (patience 6, best weights restored) |
+| Threshold | 0.5 (probability >= 0.5 means abnormal) |
+| Precision | float32 |
+
+Training used only X_train / X_val. The test set was used once, for the final evaluation of the best checkpoint.
+
+**Test set results:**
+
+| Metric | 1D-CNN |
+|---|---|
+| Accuracy | 0.8066 |
+| Precision (abnormal) | 0.5139 |
+| Recall (abnormal) | 0.5193 |
+| F1-score (abnormal) | 0.5166 |
+| Macro F1 | 0.6978 |
+| Specificity | 0.8780 |
+| ROC-AUC | 0.8448 |
+| Test loss | 0.5674 |
+| Confusion matrix (TN / FP / FN / TP) | 11179 / 1554 / 1521 / 1643 |
+| Epochs run / best epoch | 7 / 1 |
+| Training time (7 epochs, no GPU visible in the run) | 462.6 s |
+
+**1D-CNN vs CNN-LSTM (test set, threshold 0.5):**
+
+| Metric | 1D-CNN | CNN-LSTM |
+|---|---|---|
+| Accuracy | 0.8066 | 0.7605 |
+| Precision (abnormal) | 0.5139 | 0.4138 |
+| Recall (abnormal) | 0.5193 | 0.4880 |
+| F1-score (abnormal) | 0.5166 | 0.4479 |
+| Specificity | 0.8780 | 0.8282 |
+| ROC-AUC | 0.8448 | 0.7418 |
+
+**Notes and limitations:**
+
+- Best validation loss (0.4543, val accuracy 0.8145) came at epoch 1. After that, train accuracy rose to about 98.8% while validation loss went up (0.62 to 0.78), so the model overfits the training records. Early stopping restored epoch 1 weights.
+- Test records are unseen patients (record-wise split), and abnormal share is 19.9% in test vs 8.2% in train, so abnormal precision and recall are only about 0.51 to 0.52.
+- Settings are the same as Member 4 for data, seed, batch size, optimizer, loss, class weights and threshold. Differences: max epochs 30 (vs 15), early stopping patience 6 (vs 4), and ReduceLROnPlateau is used.
+- The 1D-CNN was run once; no repeated runs, so small differences between models should not be over-interpreted.
+
 ## Folder guide
 
 | Folder | What goes here | Main member |
@@ -180,6 +236,13 @@ Train has far fewer abnormal beats (8.2%) than test (19.9%), so use class weight
 
 - notebooks/02_preprocessing_v1_Ritam_WORK.ipynb - preprocessing and split
 - preprocessing/ - code and README
+
+## Member 3 files
+
+- notebooks/03_1d_cnn_Rishi_WORK.ipynb - 1D-CNN training and evaluation
+- models/1d_cnn_model.keras - trained 1D-CNN model (best checkpoint, epoch 1)
+- results/1d_cnn_metrics.csv, 1d_cnn_classification_report.csv
+- graphs/1d_cnn_accuracy.png, 1d_cnn_loss.png, 1d_cnn_confusion_matrix.png
 
 ## Member 4 files
 
