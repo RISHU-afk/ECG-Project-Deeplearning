@@ -1,0 +1,4 @@
+# Large processed data file (hosted on Google Drive, see README)
+*.npz
+__pycache__/
+*.pyc
