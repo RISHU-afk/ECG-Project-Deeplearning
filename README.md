@@ -46,9 +46,8 @@ Before running: download ecg_processed_v1.npz from Google Drive (link in the "Pr
 | Preprocessing + split | Member 2 | Done |
 | 1D-CNN | Member 3 | Done |
 | CNN-LSTM + CPU/GPU | Member 4 | Done |
-| Integration + evaluation + demo | Member 5 | Demo app and results comparison done; final report in progress |
+| Integration + evaluation + demo | Member 5 | Done |
 
-Update your row when your part is finished.
 
 ## Dataset (Member 1)
 
