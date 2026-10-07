@@ -15,3 +15,11 @@
 Column notes for cnn_lstm_cpu_gpu_timing_v1.csv: epoch1_s includes warm-up, steady_epoch_avg_s is the average from epoch 2 onward, inference_test_set_s is the time to predict the full test set (15,897 beats).
 
 Add your result files here (metrics, timing tables, confusion matrices).
+
+## How the numbers are used (Member 5)
+
+- demo/app.py reads 1d_cnn_metrics.csv, cnn_lstm_metrics_v1.csv, cnn_lstm_cpu_gpu_timing_v1.csv and hardware_info_v1.json and shows them in its evaluation step.
+- graphs/final_model_comparison.png is drawn from the same CSV files.
+- CPU/GPU speedups (CPU time / GPU time) from cnn_lstm_cpu_gpu_timing_v1.csv: total training 8.76x, steady epoch 9.75x, inference on the test set 7.43x.
+- Use cnn_lstm_metrics_v1.csv (main run) for model comparison and cnn_lstm_cpu_gpu_timing_v1.csv only for timing. The 5-epoch timing runs have slightly different accuracy (0.7632 CPU, 0.7671 GPU) than the main run (0.7605).
+- 1d_cnn_metrics.csv: the 1D-CNN training_time_sec (462.6 s, 7 epochs) comes from a run with no GPU visible, so it is not directly comparable with the CNN-LSTM GPU time.
