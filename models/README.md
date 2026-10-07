@@ -13,3 +13,16 @@ Load a model:
     pred = (prob >= 0.5).astype(int)    # 0 = Normal, 1 = Abnormal
 
 Model output is a classification result, not a clinical diagnosis.
+
+## Input and output
+
+- Input shape: (batch, 360, 1) - one preprocessed beat (bandpass 0.5 to 45 Hz, 360 samples, per-segment z-score)
+- Output: one sigmoid value = probability of abnormal (not 5 classes)
+
+## Versions
+
+Both models were saved with Keras 3.13.2 (TensorFlow 2.20.0 in Colab). Load them with TensorFlow 2.20.0 / Keras 3.x (see requirements.txt). TensorFlow 2.15 uses Keras 2 and may fail to load these .keras files.
+
+## Used by
+
+demo/app.py (Member 5) loads both files from this folder.
