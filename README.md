@@ -7,6 +7,27 @@ GPU-Accelerated Deep Learning-Based ECG Signal Classification for Cardiac Abnorm
 - **Goal:** Classify ECG beats as normal or abnormal, and compare CPU vs GPU training performance
 - **Environment:** Google Colab (Python, TensorFlow/Keras)
 
+## Quick start (run the demo)
+
+    pip install -r requirements.txt
+    streamlit run demo/app.py
+
+Before running: download ecg_processed_v1.npz from Google Drive (link in the "Processed data" section below) and put it in the project root or in a data/ folder. Full demo guide: demo/README.md
+
+## Repository structure
+
+    ECG-Project-Deeplearning-main/
+    |-- README.md                  this file
+    |-- requirements.txt           packages for the demo (TensorFlow 2.20.0, Keras 3.13.2)
+    |-- dataset/                   dataset README (Member 1)
+    |-- preprocessing/             preprocessing code + README (Member 2)
+    |-- notebooks/                 Colab notebooks 01 to 04
+    |-- models/                    1d_cnn_model.keras, cnn_lstm_v1.keras
+    |-- results/                   metrics, timing, settings, hardware CSV/JSON
+    |-- graphs/                    all plots
+    |-- demo/                      app.py (Streamlit demo) + README (Member 5)
+    |-- report/                    report README / outline
+
 ## Team
 
 | Member | Role | Name |
@@ -25,7 +46,7 @@ GPU-Accelerated Deep Learning-Based ECG Signal Classification for Cardiac Abnorm
 | Preprocessing + split | Member 2 | Done |
 | 1D-CNN | Member 3 | Done |
 | CNN-LSTM + CPU/GPU | Member 4 | Done |
-| Integration + demo | Member 5 | Pending |
+| Integration + evaluation + demo | Member 5 | Demo app and results comparison done; final report in progress |
 
 Update your row when your part is finished.
 
@@ -106,7 +127,7 @@ Train has far fewer abnormal beats (8.2%) than test (19.9%), so use class weight
 
 **Model:** ECG (360 x 1) -> 3 x (Conv1D + MaxPool) -> LSTM(64) -> Dense(32) -> Dropout(0.3) -> Sigmoid (Normal / Abnormal)
 
-**Files:** notebooks/cnn_lstm_gpu_v1_Rohan_WORK.ipynb, models/cnn_lstm_v1.keras, results/cnn_lstm_*.csv, graphs/cnn_lstm_*.png
+**Files:** notebooks/04_cnn_lstm_gpu_v1_Rohan_WORK.ipynb, models/cnn_lstm_v1.keras, results/cnn_lstm_*.csv, graphs/cnn_lstm_*.png
 
 **Experiment settings** (Member 3 should use the same settings so the comparison is fair):
 
@@ -212,6 +233,42 @@ Training used only X_train / X_val. The test set was used once, for the final ev
 - Settings are the same as Member 4 for data, seed, batch size, optimizer, loss, class weights and threshold. Differences: max epochs 30 (vs 15), early stopping patience 6 (vs 4), and ReduceLROnPlateau is used.
 - The 1D-CNN was run once; no repeated runs, so small differences between models should not be over-interpreted.
 
+## Integration, final comparison and demo (Member 5)
+
+**Files:** demo/app.py, demo/README.md, requirements.txt, report/README.md. All numbers below are copied from results/*.csv and results/*.json, nothing is estimated.
+
+**Demo flow:** input ECG beat -> preprocessing (bandpass 0.5 to 45 Hz + per-segment z-score, same as Member 2) -> 1D-CNN and CNN-LSTM (one sigmoid output each, threshold 0.5) -> predicted class: Normal or Abnormal.
+
+**Final model comparison (test set, 15,897 beats from 7 unseen records):**
+
+| Metric | 1D-CNN (Member 3) | CNN-LSTM (Member 4) |
+|---|---|---|
+| Accuracy | 0.8066 | 0.7605 |
+| Precision (abnormal) | 0.5139 | 0.4138 |
+| Recall (abnormal) | 0.5193 | 0.4880 |
+| F1-score (abnormal) | 0.5166 | 0.4479 |
+| Specificity | 0.8780 | 0.8282 |
+| ROC-AUC | 0.8448 | 0.7418 |
+| Confusion matrix (TN / FP / FN / TP) | 11179 / 1554 / 1521 / 1643 | 10546 / 2187 / 1620 / 1544 |
+
+**Final CNN-LSTM CPU vs GPU (Tesla T4 vs 2-core Xeon):**
+
+| Metric | CPU | GPU | Speedup |
+|---|---|---|---|
+| Total training time (5 epochs) | 297.20 s | 33.94 s | 8.76x |
+| Average epoch time (epoch 2 onward) | 60.64 s | 6.22 s | 9.75x |
+| Inference, full test set | 3.563 s | 0.479 s | 7.43x |
+
+**Conclusions (based only on the measured values above):**
+
+- On this test set the 1D-CNN is better than the CNN-LSTM on every metric in the comparison table. The extra LSTM layer did not improve results here.
+- Both models are weak on the abnormal class (F1 about 0.45 to 0.52). The test set has 19.9% abnormal beats while train has 8.2%, and test records are unseen patients.
+- GPU gives about 7.4x to 9.8x speedup for the CNN-LSTM, depending on what is measured (inference, total training, steady epoch).
+- Training time of the two models must not be compared directly: the 1D-CNN run (462.6 s, 7 epochs) had no GPU visible and used early stopping with max 30 epochs, while the CNN-LSTM main run (112.11 s, 13 epochs) used the T4 GPU.
+- Each timing experiment was run once, so small differences should not be over-interpreted.
+
+**Demo:** run `streamlit run demo/app.py`. Step 1 choose a test beat (or upload an ECG file), Step 2 see the preprocessing, Step 3 see both model predictions with P(abnormal), Step 4 see the evaluation tables, which the app reads directly from results/*.csv.
+
 ## Folder guide
 
 | Folder | What goes here | Main member |
@@ -222,15 +279,14 @@ Training used only X_train / X_val. The test set was used once, for the final ev
 | models/ | Trained models | Member 3, 4 |
 | results/ | Metrics, timing tables, CSV files | All |
 | graphs/ | Plots and charts | All |
-| demo/ | Final demo files | Member 5 |
+| demo/ | Final demo (app.py) and demo guide | Member 5 |
 | report/ | Project report | All |
-| presentation/ | PPT | All |
 
 ## Member 1 files
 
 - results/dataset_stats_per_record.csv - beat counts per record
 - graphs/class_distribution.png, ecg_normal.png, ecg_abnormal_V.png, ecg_abnormal_A.png
-- notebooks/Dataset_+_ECG_ANALYSIS_Ronit_WORK.ipynb - dataset analysis notebook
+- notebooks/01_dataset_ecg_analisis_Ronit_WORK.ipynb - dataset analysis notebook
 
 ## Member 2 files
 
@@ -246,10 +302,18 @@ Training used only X_train / X_val. The test set was used once, for the final ev
 
 ## Member 4 files
 
-- notebooks/cnn_lstm_gpu_v1_Rohan_WORK.ipynb - CNN-LSTM training, CPU/GPU experiments
+- notebooks/04_cnn_lstm_gpu_v1_Rohan_WORK.ipynb - CNN-LSTM training, CPU/GPU experiments
 - models/cnn_lstm_v1.keras - trained CNN-LSTM model
 - results/cnn_lstm_metrics_v1.csv, cnn_lstm_cpu_gpu_timing_v1.csv, cnn_lstm_timing_raw_v1.csv, cnn_lstm_history_v1.csv, cnn_lstm_experiment_settings_v1.json, hardware_info_v1.json
 - graphs/cnn_lstm_training_curves_v1.png, cnn_lstm_confusion_matrix_v1.png, cnn_lstm_cpu_vs_gpu_v1.png
+
+## Member 5 files
+
+- demo/app.py - Streamlit demo (input ECG, preprocessing, both models, evaluation tables)
+- demo/README.md - how to run the demo
+- requirements.txt - packages for the demo
+- report/README.md - report outline with the final numbers
+- README.md and the README.md of every folder - kept up to date
 
 ## Rules
 
@@ -259,8 +323,11 @@ Training used only X_train / X_val. The test set was used once, for the final ev
 - Every number in the report must come from a real experiment.
 - Model output is a classification result, not a clinical diagnosis.
 
-- ## 🚀 How to Run Final Integrated Demo (Member 5)
+## How to Run Final Integrated Demo (Member 5)
 
 ```bash
 pip install -r requirements.txt
-streamlit run app.py
+streamlit run demo/app.py
+```
+
+Needs `models/` (both .keras files), `results/` and `ecg_processed_v1.npz` (Google Drive link above). Models were saved with Keras 3.13.2, so use TensorFlow 2.20.0 as in requirements.txt. More details and troubleshooting: demo/README.md
