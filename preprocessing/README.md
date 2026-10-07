@@ -58,3 +58,17 @@ X_test, y_test   = data['X_test'], data['y_test']
 print("Train:", X_train.shape, y_train.shape)
 print("Val:  ", X_val.shape, y_val.shape)
 print("Test: ", X_test.shape, y_test.shape)
+```
+
+Expected output:
+
+    Train: (68386, 360, 1) (68386,)
+    Val:   (16399, 360, 1) (16399,)
+    Test:  (15897, 360, 1) (15897,)
+
+---
+
+## 6. Notes
+- Beats whose 360-sample window does not fit inside the record are dropped, so 100,733 annotated beats become 100,682 segments (68,386 + 16,399 + 15,897).
+- The filter is applied to the whole record first, then the 360-sample window is cut and z-scored. The demo (demo/app.py) does the same for raw ECG input; beats taken from ecg_processed_v1.npz are already processed and are not filtered again.
+- Code: preprocessing/02_preprocessing_v1.py (same logic as notebooks/02_preprocessing_v1_Ritam_WORK.ipynb).
