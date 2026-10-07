@@ -12,9 +12,4 @@
 | cnn_lstm_training_curves_v1.png | Member 4 | CNN-LSTM training and validation loss/accuracy per epoch |
 | cnn_lstm_confusion_matrix_v1.png | Member 4 | CNN-LSTM confusion matrix on the test set |
 | cnn_lstm_cpu_vs_gpu_v1.png | Member 4 | CPU vs GPU: total training time, epoch time, inference time |
-
-## Graphs still to be added
-
-- **Member 5:** final comparison chart
-
-After uploading your graph, add one row for it in the table above.
+| final_model_comparison.png | Member 5 | 1D-CNN vs CNN-LSTM test metrics (accuracy, precision, recall, F1, ROC-AUC) and CNN-LSTM CPU vs GPU timing with speedups. Values read from results/*.csv |
