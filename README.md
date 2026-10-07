@@ -258,3 +258,9 @@ Training used only X_train / X_val. The test set was used once, for the final ev
 - If preprocessing changes, inform everyone and save it as a new version.
 - Every number in the report must come from a real experiment.
 - Model output is a classification result, not a clinical diagnosis.
+
+- ## 🚀 How to Run Final Integrated Demo (Member 5)
+
+```bash
+pip install -r requirements.txt
+streamlit run app.py
