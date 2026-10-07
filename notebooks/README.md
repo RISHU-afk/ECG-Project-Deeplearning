@@ -10,3 +10,5 @@
 Run notebooks in Google Colab. File naming: name_v1.ipynb, name_v2.ipynb.
 
 Member 4 notebook: upload ecg_processed_v1.npz to Colab (or let the notebook download it from Drive), select a GPU runtime, then Runtime > Run all. It saves models, results and graphs in /content/Group_7_ECG_Project/ and downloads them as one zip.
+
+Demo: the Streamlit demo is in demo/app.py (Member 5), not a notebook. Run it with `streamlit run demo/app.py` from the project root. The notebooks produce the models and results that the demo loads: models/*.keras and results/*.csv.
