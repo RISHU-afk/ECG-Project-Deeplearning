@@ -42,7 +42,3 @@ Hardware: Google Colab, Tesla T4 GPU, Intel Xeon 2.00GHz (2 logical cores), Tens
 - Training times of the two models are not directly comparable (1D-CNN ran without GPU for 7 epochs, CNN-LSTM main run used the T4 GPU for 13 epochs).
 - Each timing experiment was run once.
 - Model output is a classification result, not a clinical diagnosis.
-
-## Status
-
-Report not written yet. Each member writes their own section from the table above; Member 5 merges and checks that every number matches results/.
