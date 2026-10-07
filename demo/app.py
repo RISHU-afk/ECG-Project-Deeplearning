@@ -5,7 +5,7 @@ Flow: input ECG -> preprocessing (Member 2) -> 1D-CNN (Member 3) + CNN-LSTM (Mem
 
 All numbers shown in the evaluation section are read from results/*.csv
 (real experiment outputs). Nothing is hardcoded.
-Run:  streamlit run app.py
+Run (from the project root):  streamlit run demo/app.py
 """
 import os
 
@@ -15,12 +15,26 @@ import pandas as pd
 import streamlit as st
 from scipy.signal import butter, filtfilt
 
-BASE = os.path.dirname(os.path.abspath(__file__))
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def _find_root(start):
+    """Project root = the folder that contains models/ and results/ (works if app.py is in demo/)."""
+    p = start
+    for _ in range(3):
+        if os.path.isdir(os.path.join(p, "models")) and os.path.isdir(os.path.join(p, "results")):
+            return p
+        p = os.path.dirname(p)
+    return start
+
+
+BASE = _find_root(HERE)
 MODEL_DIR = os.path.join(BASE, "models")
 RESULT_DIR = os.path.join(BASE, "results")
 DATA_NAME = "ecg_processed_v1.npz"
 DRIVE_LINK = "https://drive.google.com/file/d/1TO043QL8KSBiMkkf4Di5MMbLF5wXGgT0/view"
-DATA_CANDIDATES = [os.path.join(BASE, p, DATA_NAME) for p in ("", "data", "dataset", "demo")]
+DATA_CANDIDATES = [os.path.join(b, p, DATA_NAME) for b in dict.fromkeys([BASE, HERE, os.getcwd()])
+                   for p in ("", "data", "dataset", "demo")]
 
 MODEL_FILES = {
     "1D-CNN": os.path.join(MODEL_DIR, "1d_cnn_model.keras"),
