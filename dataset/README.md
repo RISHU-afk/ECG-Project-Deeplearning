@@ -5,7 +5,7 @@ MIT-BIH Arrhythmia Database, PhysioNet (https://physionet.org/content/mitdb/1.0.
 Downloaded with the WFDB Python package (wfdb.dl_database).
 
 ## Folder structure
-dataset/mitdb/ has 48 records, each with 3 files:
+The raw records are not stored in this GitHub repo (download them with the code in the main README). In Colab, dataset/mitdb/ has 48 records, each with 3 files:
 - .dat = ECG signal, .hea = header (sampling rate, leads, gain), .atr = beat annotations
 Total files: 144
 
@@ -53,3 +53,7 @@ Per-record counts: results/dataset_stats_per_record.csv
 ## Files from Member 1
 - graphs/class_distribution.png, ecg_normal.png, ecg_abnormal_V.png, ecg_abnormal_A.png
 - results/dataset_stats_per_record.csv
+
+## Used later in the project
+- Member 2 turned the 44 usable records into ecg_processed_v1.npz (see preprocessing/README.md).
+- The demo (demo/app.py) uses beats from that processed file, not the raw records.
