@@ -1,0 +1,4 @@
+Model,Device,Train_sec,Infer_ms,Train_Samples,Test_Samples
+CNN-LSTM,CPU (Xeon),297.23,0.22,68386,15897
+CNN-LSTM,GPU (Tesla T4),33.92,0.03,68386,15897
+SPEED-UP,GPU vs CPU,8.76x,7.42x,-,-
