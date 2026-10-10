@@ -11,7 +11,7 @@ Model output is a classification result (Normal / Abnormal), not a clinical diag
 | Item | Status |
 |---|---|
 | Report outline with final numbers (this file) | Done |
-| Report document (report_v1.docx / .pdf) | To do |
+| Report document (report_v1.docx / .pdf) | Done |
 | Presentation (presentation/ folder) | To do |
 
 ## Report structure
