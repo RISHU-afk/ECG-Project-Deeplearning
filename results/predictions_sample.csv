@@ -1,0 +1,4 @@
+Beat_ID,Truth,CNN_Pred,CNN_Prob,LSTM_Pred,Note
+0,Abnormal,Abnormal,0.945,Normal,1D-CNN correct
+1,Normal,Normal,0.12,Normal,Both correct
+2,Abnormal,Abnormal,0.89,Abnormal,Both correct
